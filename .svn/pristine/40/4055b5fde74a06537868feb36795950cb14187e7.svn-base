@@ -1,0 +1,36 @@
+package omadikh_ergasia;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+//Neo anebasma
+//Trying to synchronize (george pal)
+
+public class Omadikh_ergasia {
+
+    /* Oρισμός του Entity Manager */
+    public static EntityManager em;
+
+    public static void main(String[] args) {
+
+        /* Δημιουργία Entity Manager Factory */
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Omadikh_ergasiaPU");
+
+        /* Δημιουργία του Entity Manager */
+        em = emf.createEntityManager();
+
+        /* Δημιουργία αντικειμένων τύπου "Εκλογική Περιφέρεια" */
+        TblElectoralPeriphery chania = createNewElectoralPeriphery("Χανιά Κρήτης", 50,3);
+    }
+
+    /* Δημιουργία νέας "Εκλογικής Περιφέρειας" */
+    static TblElectoralPeriphery createNewElectoralPeriphery(String periphery_name, Integer registeredCitizens_count, Integer seats_count) {
+        em.getTransaction().begin();
+        TblElectoralPeriphery ep = new TblElectoralPeriphery(periphery_name, registeredCitizens_count, seats_count); //έχει δημιουργηθεί κατάλληλος constractor
+        em.persist(ep); //entity managed
+        em.getTransaction().commit();
+        System.out.println("Δημιουργήθηκε η Εκλογική Περιφέρεια '" + periphery_name + "' με " + registeredCitizens_count + " εγγεγραμμένους πολίτες και " + seats_count + " έδρες.");
+        return ep;
+    }
+}
